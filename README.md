@@ -1,61 +1,19 @@
-# Kings County Housing Bake-off
 
-For many machine learning projects, the goal is to create a model that best predicts the target variable on unseen data. In order to develop a model, we have a general process, but there is a lot of flexibility within this process. Even when working with the same data, people can produce different models by engineering different features, or by selecting certain features to include in the models. **There is no one correct way to create a model**.
+# Predicting Housing Prices Using Linear Regression
+### Flatiron Data Science Program - Project 2<br>By Khyatee Desai<br>October 23, 2020
 
-For Phase 2, you will be creating a model that will **predict the prices of homes** sold in the Seattle, WA area. For this project there will be **3 deliverables**:
 
-- a Github repo for this project
-- a notebook showing your final modeling process
-- a CSV file of your predictions on the holdout set
-	- name this file `housing_preds_your_name.csv` (replacing `your_name` with your name) and send via Slack
+# Background
+The purpose of this project is to create a linear regression model that will **predict the prices of homes** sold in the Seattle, WA area. This repository contains the following components:
 
-## Holdout predictions
+- EDA & modeling process notebook [`eda_modeling_process.ipynb`](eda_modeling_process.ipynb)
+- final model notebook [`final_model.ipynb`](final_model.ipynb)
+- labeled training data [`kc_house_data_train.csv`](kc_house_data_train.csv)
+- unlabeled holdout data [`housing_preds_khyatee.csv`](housing_preds_khyatee.csv")
+- a CSV file of model predictions on the holdout set [`Predict_holdout.ipynb`](Predict_holdout.ipynb)
 
-You will develop a model using `kc_house_data_train.csv`. Then you will use that model/process to predict on the `kc_house_data_holdout_features.csv`. 
+# Data Set Information
 
-***Important note #1***: If you create a new feature with your training data, you will need to do the same thing with the test data before using the model to predict on the holdout data.  
-
-After using your model to predict the holdout data, you will submit those predictions as a `.csv` file to the instructional staff. We will score the submitted predictions using the RMSE of those predictions.
-
-***Important note #2***: While we will score and rank each submission, your class rank will **not** have any direct impact on passing Phase 2. *The goal is to make sure you can actually produce predictions*.
-
-So as long as you successfully **complete the modeling process** and can **explain the work you did**, you will be able to pass.  
-
-## Final notebook
-
-Through the modeling process, you will try many different techniques (**feature engineering** and **feature selection**, for example) to try and create your best model. Some will work and some will not lead to a better model. Through your modeling process, you will identify what actions create the best model. After you have finalized your process, you must create a 'cleaned up' and annotated notebook that shows your process.
-
-Your notebook must include the following:
-
-- **Exploratory Data Analysis (EDA):** You must create **at least 4 data visualizations** that help to explain the data. These visualizations should help someone unfamiliar with the data understand the target variable and the features that help explain that target variable.
-
-- **Feature Engineering:** You must create **at least 3 new features** to test in your model. Those features do not have to make it into your final model, as they might be removed during the feature selection process. That is expected, but you still need to explain the features you engineer and your thought process behind why you thought they would explain the selling price of the house.  
-
-- **Statistical Tests:** Your notebook must show **at least 3 statistical tests** that you preformed on your data set. Think of these as being part of your EDA process; for example, if you think houses with a view cost more than those without a view, then perform a two-sample T-test. These can be preliminary evidence that a feature will be important in your model.  
-
-- **Feature Selection:** There are many ways to do feature selection: filter methods, P-values, or recursive feature elimination (RFE). You should try multiple different techniques and combinations of them. For your final model, you will **settle on a process of feature selection**; this process should be **clearly shown in your final notebook**.
-
-- **Model Interpretation:** One of the benefits of a linear regression model is that you can **interpret the coefficients** of the model **to derive insights**. For example, which feature has the biggest impact on the price of the house? Was there a feature that you thought would be significant but was not? Think if you were a real estate agent helping clients price their house: what information would you find most helpful from this model?
-
-## GitHub Repository
-
-A GitHub repo is a good way to keep track of your work, but also to display the work you did to future employers. Your GitHub should contain the following:
-
-- A `README.md` that briefly describes the project and the files within the repo.
-- Your cleaned and annotated notebook showing your work.
-- A folder with all of your 'working' notebooks where you played around with your data and the modeling process.
-
-## Data Set Information
-
-This data set contains information about houses that were sold in the Seattle area during the last decade. Below is a description of the column names, to help you understand what the data represents. As with most real world data sets, the column names are not perfectly described, so you'll have to do some research or use your best judgment if you have questions relating to what the data means. 
-
-Like every data set, there are some irregularities and quirks. Trust me, there wasn't a house sold with 33 bedrooms, even though the data says there was. *You have to decide how you want to handle that example*. Also, some houses were sold more than once within the time frame of this dataset. Think about how that can be useful information in predicting the selling price.
-
-As you go through this modeling process, think about what determines how much someone will pay for a house.  For example, the larger the house is, the more people will pay for it. If you understand why certain houses cost more than others and represent that in your model, it will be a more accurate model.  
-
-Have fun!
-
-# Column Names and descriptions for Kings County Data Set
 * **id** - unique ID for a house
 * **date** - Date day house was sold
 * **price** - Price is prediction target
@@ -77,3 +35,73 @@ Have fun!
 * **long** - Longitude coordinate
 * **sqft_living15** - The square footage of interior housing living space for the nearest 15 neighbors
 * **sqft_lot15** - The square footage of the land lots of the nearest 15 neighbors
+
+
+# Process
+## Data Prep
+- check for null values
+- change date strings to datetime objects
+- drop irrelevant columns (id and index 0)
+- impute massive outliers by setting them at 6 standard deviations from the mean
+## Exploratory Data Analysis
+- inspect scatter matrix for multicollinearity and normality
+- Create zipcode dummy variables for AOVA test
+
+### Statistical Tests:
+**Business Question 1: Does a house being located on water impact its price?**<br>
+**Test:**  2-sample one-tail Welch's T-Test (significance level: 0.05)
+**Rationale:**  Comparing the means of two independent samples with different variances & sizes  
+**Ho:**  Houses on a waterfront sell for the same amount on average as houses not on a waterfront.  
+**Ha:**  Houses on a waterfront sell for more on average than houses not on a waterfront.
+**Outcome:** P-value is 3.47e-23, which is lower than 0.05 alpha, indicating we can reject the null hypothesis in favor of the alternative, that houses on a waterfront sell for more on average than houses not on a waterfront.
+
+**Business Question 2:  Does location (zipcode) impact house price?**<br>
+**Test:** ANOVA Test
+**Rationale:**  Comparing means of several independent samples  
+**Ho:**  There is no difference in the average price of houses in different zip codes.  
+**Ha:**  Houses in different zip codes have different average house prices.
+**Outcome:** Very low P-values for all zip codes indicate that we can reject the null hypothesis in favor of the alternative, that houses in different zip codes have different prices on average
+
+**Business Question 3:  Do houses with basements sell for higher prices?**<br>
+**Test:** 2-Sample Welch's T-Test (significance level: 0.05)
+**Rationale:**  Comparing means of several independent samples with different variances & sample sizes  
+**Ho:**  There is no difference in the average price of houses with and without basements.  
+**Ha:**  Houses with basements sell for higher prices on average.
+**Outcome:** The P-value is very small (1.94e-102), which is lower than the alpha level 0.05, meaning we can reject the null hypothesis in favor of the alternative, that houses with basements sell for higher prices on average.
+
+## Feature Engineering
+- `yrs_old` - house year sold - year built
+- `miles_from_city` - distance of each house from Pikes Place Market
+- `feature1_X_feature1` - interaction features derived by multiplying two features together
+- `log_featurex` - log transformations derived by taking the log of each feature
+- `featurex_^2` - polynomial features derived by squaring and cubing each feature
+
+## Feature Selection
+`Model_1`
+**Features:** Included all features from interactions, log transforms, polynomial transforms, and zipcode dummy variables
+**R-Squared:** 0.22 Train, 0.004 Test
+**Interpretation:**  R-squared values are very low, indicating there are too many conflicting features <br>
+`Model_2`
+**Features:** Dropped multicollinear features determined from very high VIF scores
+**R-Squared:** 0.399 Train, 0.425 Test
+**Interpretation:**  Better than model one, but indicates need for further feature selection. <br> ![Heatmap of Multicollinearity](heatmap.png)<br>
+`Model_3`
+**Features:** Used K-Best Feature selection with F-regression, and included 139 'best' features
+**R-Squared:** 0.873 Train, 0.834 Test
+**Interpretation:**  Significantly better performing than initial methods <br>
+`Model_4`
+**Features:** Used Recursive Feature Elimination to determine 'best' features to retain
+**R-Squared:** 0.866 Train, 0.872 Test
+**Interpretation:**  Best performance, so this is the method used for final model<br>
+
+
+## Model Interpretation
+Inspect Coefficients - many are difficult to interpret due to transformations.
+- presence of a waterfront changes price by $139589015.5
+- change in year built changes price by $ 72026375.3
+- change in number of floors changes price by $ 12694153.7<br>
+
+`Final_Model`
+**Features:** RFE
+**R-squared:**  0.8813219725128786
+**RMSE:**  128603.46478124417
