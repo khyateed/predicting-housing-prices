@@ -114,6 +114,6 @@ For any additional questions, please contact **Khyatee Desai - khyatee.d@gmail.c
 ├── final_model.ipynb                            <- Final model Jupyter notebook
 ├── pickled                                      <- Directory of all pickled models
 ├── kc_house_data_train.csv                      <- labeled training data CSV
-├── kc_house_data_test.csv                       <- labeled test data CSV
+├── kc_house_data_test_features.csv              <- labeled test data CSV
 └── housing_preds_khyatee.csv                    <- housing price predictions on holdout data CSV
 ```
