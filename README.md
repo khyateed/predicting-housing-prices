@@ -6,12 +6,6 @@
 # Background
 The purpose of this project is to create a linear regression model that will **predict the prices of homes** sold in the Seattle, WA area. This repository contains the following components:
 
-- EDA & modeling process notebook [`eda_modeling_process.ipynb`](eda_modeling_process.ipynb)
-- final model notebook [`final_model.ipynb`](final_model.ipynb)
-- labeled training data [`kc_house_data_train.csv`](kc_house_data_train.csv)
-- unlabeled holdout data [`housing_preds_khyatee.csv`](housing_preds_khyatee.csv")
-- a CSV file of model predictions on the holdout set [`Predict_holdout.ipynb`](Predict_holdout.ipynb)
-
 # Data Set Information
 
 * **id** - unique ID for a house
@@ -105,3 +99,21 @@ Inspect Coefficients - many are difficult to interpret due to transformations.
 **Features:** RFE
 **R-squared:**  0.8813219725128786
 **RMSE:**  128603.46478124417
+
+## For More Information
+
+Please review the full project in [my EDA notebook](eda_modeling_process.ipynb) and [Modeling notebook](final_model.ipynb).
+
+For any additional questions, please contact **Khyatee Desai - khyatee.d@gmail.com**
+
+## Repository Structure
+
+```
+├── README.md                                    <- Top-level README for reviewers of this project
+├── eda_modeling_process.ipynb                   <- EDA and modeling process in Jupyter notebook
+├── final_model.ipynb                            <- Final model Jupyter notebook
+├── pickled                                      <- Directory of all pickled models
+├── kc_house_data_train.csv                      <- labeled training data CSV
+├── kc_house_data_test.csv                       <- labeled test data CSV
+└── housing_preds_khyatee.csv                    <- housing price predictions on holdout data CSV
+```
